@@ -19,6 +19,13 @@ import execjs
 import requests
 from PIL import Image
 
+headers = {
+    'Host': 'www.zhihu.com',
+    'Referer': 'https://www.zhihu.com/',
+    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 '
+                  '(KHTML, like Gecko) Chrome/66.0.3359.181 Safari/537.36'
+}
+
 
 class ZhihuAccount(object):
 
@@ -39,12 +46,7 @@ class ZhihuAccount(object):
             'utm_source': ''
         }
         self.session = requests.session()
-        self.session.headers = {
-            'Host': 'www.zhihu.com',
-            'Referer': 'https://www.zhihu.com/',
-            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 '
-                          '(KHTML, like Gecko) Chrome/66.0.3359.181 Safari/537.36'
-        }
+        self.session.headers = headers
         self.session.cookies = cookiejar.LWPCookieJar(filename=self.temp_path + 'cookies.txt')
 
     def login(self, captcha_lang: str = 'en', load_cookies: bool = True):
@@ -52,7 +54,6 @@ class ZhihuAccount(object):
         模拟登录知乎
         :param captcha_lang: 验证码类型 'en' or 'cn'
         :param load_cookies: 是否读取上次保存的 Cookies
-        :return: bool
         若在 PyCharm 下使用中文验证出现无法点击的问题，
         需要在 Settings / Tools / Python Scientific / Show Plots in Toolwindow，取消勾选
         """
@@ -60,10 +61,6 @@ class ZhihuAccount(object):
             print('读取 Cookies 文件')
             if self.check_login():
                 print('登录成功')
-                # res = self.session.get("https://www.zhihu.com", allow_redirects=False)
-                # response = HtmlResponse(url="https://www.zhihu.com", body=res.text, encoding='utf-8')
-                # all_urls = response.css("a::attr(href)").extract()
-                # print(all_urls)
                 return self.session.cookies
             print('Cookies 已过期')
 
@@ -101,7 +98,6 @@ class ZhihuAccount(object):
     def load_cookies(self):
         """
         读取 Cookies 文件加载到 Session
-        :return: bool
         """
         try:
             self.session.cookies.load(ignore_discard=True)
@@ -113,7 +109,6 @@ class ZhihuAccount(object):
         """
         检查登录状态，访问登录页面出现跳转则是已登录，
         如登录成功保存当前 Cookies
-        :return: bool
         """
         login_url = 'https://www.zhihu.com/signup'
         resp = self.session.get(login_url, allow_redirects=False)

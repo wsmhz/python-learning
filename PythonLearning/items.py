@@ -11,8 +11,6 @@ from scrapy.loader.processors import MapCompose, Join, TakeFirst
 
 
 class PythonlearningItem(scrapy.Item):
-    # define the fields for your item here like:
-    # name = scrapy.Field()
     pass
 
 
@@ -22,18 +20,10 @@ def get_nums(value):
         nums = int(match_re.group(1))
     else:
         nums = 0
-
     return nums
 
 
-# def get_first(value):
-#     for v in value:
-#         if v is not None and v != '':
-#             return v
-
-
 class ZhihuQuestionItem(scrapy.Item):
-    #知乎的问题 item
     zhihu_id = scrapy.Field(
         output_processor=TakeFirst()
     )
@@ -70,7 +60,6 @@ class ZhihuQuestionItem(scrapy.Item):
 
 
 class ZhihuAnswerItem(scrapy.Item):
-    #知乎的问题回答item
     zhihu_id = scrapy.Field()
     url = scrapy.Field()
     question_id = scrapy.Field()

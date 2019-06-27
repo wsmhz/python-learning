@@ -9,6 +9,7 @@ import logging
 import pymongo
 from scrapy.conf import settings
 
+
 class PythonlearningPipeline(object):
     def process_item(self, item, spider):
         return item
