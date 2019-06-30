@@ -17,8 +17,8 @@ class IpPool(object):
         self.mongo_db = client[db_name]
         self.post = self.mongo_db['ip_pool']
 
+    # 删除无效代理
     def delete_proxy(self, ip_port):
-        # 删除无效代理
         self.post.delete_one({"ip_port": ip_port})
 
     # 判断ip是否可用
@@ -26,7 +26,7 @@ class IpPool(object):
         http_url = "http://www.baidu.com"
         try:
             proxy_dict = {
-                'http': 'http://' + ip_port,
+                head: head + '://' + ip_port,
             }
             response = requests.get(http_url, proxies=proxy_dict)
         except Exception:
@@ -52,11 +52,12 @@ class IpPool(object):
         ip_port = data['ip_port']
         head = data['head']
         if self.judge_proxy(ip_port, head):
-            return 'http://' + ip_port
+            return head + '://' + ip_port
         else:
             return self.get_random_proxy()
 
 
 if __name__ == "__main__":
     get_ip = IpPool()
-    print(get_ip.get_random_proxy())
+    for i in range(100):
+        get_ip.get_random_proxy()

@@ -30,7 +30,7 @@ ROBOTSTXT_OBEY = False
 # Configure a delay for requests for the same website (default: 0)
 # See https://doc.scrapy.org/en/latest/topics/settings.html#download-delay
 # See also autothrottle settings and docs
-# DOWNLOAD_DELAY = 2
+DOWNLOAD_DELAY = 2
 # The download delay setting will honor only one of:
 #CONCURRENT_REQUESTS_PER_DOMAIN = 16
 #CONCURRENT_REQUESTS_PER_IP = 16
@@ -113,9 +113,3 @@ MONGODB_DB_NAME = "python_learning"
 # today = datetime.datetime.now()
 # log_file_path = os.path.join(PROJECT_DIR, 'log/scrapy_{}_{}_{}.log'.format(today.year, today.month, today.day))
 # LOG_FILE = log_file_path
-
-# with open('D://scrapy_ip池构建.txt') as fp:
-#    lines = fp.read().split('\n')
-#    lines.pop()
-#
-# PROXIES = lines

@@ -134,6 +134,8 @@ class LagouJobItem(scrapy.Item):
 class GetIpPoolItem(scrapy.Item):
     head = scrapy.Field()
     ip_port = scrapy.Field()
+    survival_time = scrapy.Field()
+    crawl_time = scrapy.Field()
 
     def get_table_name(self):
         unique_params = {
