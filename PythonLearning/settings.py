@@ -9,6 +9,8 @@
 #     https://doc.scrapy.org/en/latest/topics/downloader-middleware.html
 #     https://doc.scrapy.org/en/latest/topics/spider-middleware.html
 import datetime
+import os
+import sys
 
 BOT_NAME = 'PythonLearning'
 
@@ -28,13 +30,13 @@ ROBOTSTXT_OBEY = False
 # Configure a delay for requests for the same website (default: 0)
 # See https://doc.scrapy.org/en/latest/topics/settings.html#download-delay
 # See also autothrottle settings and docs
-#DOWNLOAD_DELAY = 3
+# DOWNLOAD_DELAY = 2
 # The download delay setting will honor only one of:
 #CONCURRENT_REQUESTS_PER_DOMAIN = 16
 #CONCURRENT_REQUESTS_PER_IP = 16
 
 # Disable cookies (enabled by default)
-#COOKIES_ENABLED = False
+COOKIES_ENABLED = False
 
 # Disable Telnet Console (enabled by default)
 #TELNETCONSOLE_ENABLED = False
@@ -53,9 +55,12 @@ ROBOTSTXT_OBEY = False
 
 # Enable or disable downloader middlewares
 # See https://doc.scrapy.org/en/latest/topics/downloader-middleware.html
-#DOWNLOADER_MIDDLEWARES = {
-#    'PythonLearning.middlewares.PythonlearningDownloaderMiddleware': 543,
-#}
+DOWNLOADER_MIDDLEWARES = {
+   'PythonLearning.middlewares.RandomUserAgentMiddleware': 200,
+   'PythonLearning.middlewares.ProxyMiddleware': 300,
+   'scrapy.downloadermiddlewares.useragent.UserAgentMiddleware': None,
+}
+RANDOM_UA_TYPE = 'random'
 
 # Enable or disable extensions
 # See https://doc.scrapy.org/en/latest/topics/extensions.html
@@ -90,8 +95,11 @@ ITEM_PIPELINES = {
 #HTTPCACHE_IGNORE_HTTP_CODES = []
 #HTTPCACHE_STORAGE = 'scrapy.extensions.httpcache.FilesystemCacheStorage'
 
+PROJECT_DIR = os.path.abspath(os.path.dirname(__file__))
+# 将项目目录加入环境变量中
+sys.path.insert(0, PROJECT_DIR)
+# 导出文件编码
 FEED_EXPORT_ENCODING = 'utf-8'
-
 
 # MONGODB 主机名
 MONGODB_HOST = "127.0.0.1"
@@ -100,7 +108,14 @@ MONGODB_PORT = 27017
 # 数据库名称
 MONGODB_DB_NAME = "python_learning"
 
-LOG_LEVEL = 'INFO'
-today = datetime.datetime.now()
-log_file_path = 'log/scrapy_{}_{}_{}.log'.format(today.year, today.month, today.day)
-LOG_FILE = log_file_path
+# # 日志配置
+# LOG_LEVEL = 'INFO'
+# today = datetime.datetime.now()
+# log_file_path = os.path.join(PROJECT_DIR, 'log/scrapy_{}_{}_{}.log'.format(today.year, today.month, today.day))
+# LOG_FILE = log_file_path
+
+# with open('D://scrapy_ip池构建.txt') as fp:
+#    lines = fp.read().split('\n')
+#    lines.pop()
+#
+# PROXIES = lines

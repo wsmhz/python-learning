@@ -4,8 +4,13 @@
 #
 # See documentation in:
 # https://doc.scrapy.org/en/latest/topics/spider-middleware.html
+import random
 
+import requests
+from fake_useragent import UserAgent
 from scrapy import signals
+
+from utils.ipPool import IpPool
 
 
 class PythonlearningSpiderMiddleware(object):
@@ -101,3 +106,43 @@ class PythonlearningDownloaderMiddleware(object):
 
     def spider_opened(self, spider):
         spider.logger.info('Spider opened: %s' % spider.name)
+
+
+"""
+避免被ban策略之一：使用useragent池。
+使用注意：需在settings.py中进行相应的设置。
+"""
+
+
+class RandomUserAgentMiddleware(object):
+    '''
+    随机更换User-Agent
+    '''
+
+    def __init__(self, crawler):
+        super(RandomUserAgentMiddleware, self).__init__()
+        self.ua = UserAgent()
+        self.ua_type = crawler.settings.get('RANDOM_UA_TYPE', 'random')
+
+    @classmethod
+    def from_crawler(cls, crawler):
+        return cls(crawler)
+
+    def process_request(self, request, spider):
+        def get_ua():
+            return getattr(self.ua, self.ua_type)
+        random_ua = get_ua()
+        print(request.url + " ->> 随机User-Agent: " + random_ua)
+        request.headers.setdefault('User-Agent', random_ua)
+
+
+ip_pool = IpPool()
+
+
+class ProxyMiddleware(object):
+    # 设置ip代理
+    def process_request(self, request, spider):
+        proxy = ip_pool.get_random_proxy()
+        # proxy = 'http://127.0.0.1:8123'
+        print(request.url + " ->> 随机ip代理: " + proxy)
+        request.meta["proxy"] = proxy

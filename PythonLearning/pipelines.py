@@ -6,13 +6,9 @@
 # See: https://doc.scrapy.org/en/latest/topics/item-pipeline.html
 
 import logging
+
 import pymongo
 from scrapy.conf import settings
-
-
-class PythonlearningPipeline(object):
-    def process_item(self, item, spider):
-        return item
 
 
 class MongoPipeline(object):
