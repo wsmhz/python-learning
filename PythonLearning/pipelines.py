@@ -8,20 +8,22 @@
 import logging
 
 import pymongo
-from scrapy.conf import settings
 
 
 class MongoPipeline(object):
-    mongo_db = object
 
-    def __init__(self):
+    def __init__(self, mongo_db):
+        self.mongo_db = mongo_db
+
+    @classmethod
+    def from_settings(cls, settings):
         host = settings["MONGODB_HOST"]
         port = settings["MONGODB_PORT"]
         db_name = settings["MONGODB_DB_NAME"]
         # 创建MONGODB数据库链接
         client = pymongo.MongoClient(host=host, port=port)
         # 指定数据库
-        self.mongo_db = client[db_name]
+        return cls(client[db_name])
 
     def process_item(self, item, spider):
         # 根据不同的item 构建不同的表
